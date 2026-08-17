@@ -66,14 +66,199 @@ table.data tr:last-child td{border-bottom:none}
 td.neg{color:var(--crit-ink)} td.pos{color:var(--good-ink)}
 .scroll{max-height:320px;overflow-y:auto}
 footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
+
+.livebar{display:flex;justify-content:flex-end;align-items:flex-start;gap:10px;flex-wrap:wrap;
+  margin:0 0 18px}
+.lz{background:var(--surface);border:1px solid var(--hair);border-radius:9px;padding:7px 11px;
+  min-width:104px}
+.lz .n{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:5px}
+.lz .n i{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;
+  flex:0 0 auto}
+.lz.on .n i{background:var(--good)}
+.lz.on .n{color:var(--good-ink)}
+.lz .v{font-family:var(--mono);font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;
+  letter-spacing:-.01em;margin-top:2px}
+@media (prefers-reduced-motion:no-preference){
+  .lz.on .n i{animation:lpulse 2s ease-in-out infinite}
+}
+@keyframes lpulse{0%,100%{opacity:1}50%{opacity:.35}}
+.statusline{display:flex;align-items:flex-start;gap:10px;background:var(--surface-2);
+  border:1px solid var(--hair);border-radius:12px;padding:13px 16px;margin:0 0 20px}
+.statusline .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);margin-top:7px;
+  flex:0 0 auto}
+.statusline.live .dot{background:var(--good)}
+@media (prefers-reduced-motion:no-preference){
+  .statusline.live .dot{animation:lpulse 2s ease-in-out infinite}
+}
+.statusline .body{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.statusline .body b{color:var(--ink)}
+.statusline .meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:4px}
+
 </style>
 
 <div class="wrap">
 
+
+
+
+
+
+
+
+<!-- live-status:start -->
+<div class="livebar">
+  <div class="lz" id="lz0"><div class="n"><i></i>UTC</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz1"><div class="n"><i></i>Tokyo</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz2"><div class="n"><i></i>Shanghai</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz3"><div class="n"><i></i>Hong Kong</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz4"><div class="n"><i></i>Seoul</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz5"><div class="n"><i></i>Taipei</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz6"><div class="n"><i></i>Sydney</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz7"><div class="n"><i></i>New York</div><div class="v">--:--:--</div></div>
+</div>
+<div class="statusline" id="statusline">
+  <div class="dot"></div>
+  <div><div class="body" id="statusBody"></div><div class="meta" id="statusMeta"></div></div>
+</div>
+<script>
+/* What the book is doing *right now* is genuinely a function of the clock, so it is computed
+   live rather than stamped at build time. The money figures are not: they move only when the
+   ledger settles a session, and the page says so instead of animating a number it cannot know. */
+(function(){
+  var SETTLED = "2026-08-13";      /* last session the ledger has priced */
+  var BUILT   = "2026-08-17T10:20:12+00:00";        /* when these figures were generated, UTC */
+  var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["Sydney", "Australia/Sydney", "SYD"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
+  var MODE  = "public";         /* private: name the cycle; public: count only */
+  /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
+  var SESS = {
+    NYC: [[570,960]],
+    HKG: [[570,720],[780,960]],
+    TYO: [[540,690],[750,930]],
+    SHA: [[570,690],[780,900]],
+    SEL: [[540,930]],
+    TPE: [[540,810]],
+    SYD: [[600,960]]
+  };
+
+  function parts(tz, d){
+    var g = {};
+    new Intl.DateTimeFormat('en-GB',{timeZone:tz,weekday:'short',day:'2-digit',month:'short',
+      hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})
+      .formatToParts(d).forEach(function(p){ g[p.type]=p.value; });
+    g.mins = parseInt(g.hour,10)*60 + parseInt(g.minute,10);
+    g.wd = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(g.weekday);
+    g.weekday_n = g.wd;
+    return g;
+  }
+  function isOpen(key, g){
+    if (!key || g.wd===0 || g.wd===6) return false;
+    return SESS[key].some(function(w){ return g.mins>=w[0] && g.mins<w[1]; });
+  }
+  function hm(m){ var h=Math.floor(m/60), x=m%60;
+    return (h>0? h+'h ':'') + x + 'm'; }
+  /* The next time any tracked market opens or closes. Genuinely changes every second, which is
+     what makes the header live -- as opposed to a number that pretends to. */
+  function nextEvent(now){
+    var best = null;
+    ZONES.forEach(function(z){
+      if (!z[2]) return;
+      var t = parts(z[1], now);
+      if (t.wd === 0 || t.wd === 6) return;
+      SESS[z[2]].forEach(function(w){
+        [[w[0],'opens'],[w[1],'closes']].forEach(function(e){
+          var mins = e[0] - t.mins;
+          if (mins <= 0) return;
+          var secs = mins*60 - parseInt(t.second,10);
+          if (secs > 0 && (best === null || secs < best.secs))
+            best = {secs:secs, label:z[0], what:e[1]};
+        });
+      });
+    });
+    return best;
+  }
+  function clock(secs){
+    var h=Math.floor(secs/3600), m=Math.floor((secs%3600)/60), s2=secs%60;
+    return (h?h+'h ':'') + (h||m?m+'m ':'') + s2 + 's';
+  }
+  function ago(ms){
+    var s=Math.floor(ms/1000);
+    if (s<60) return s+'s ago';
+    if (s<3600) return Math.floor(s/60)+'m ago';
+    if (s<86400) return Math.floor(s/3600)+'h ago';
+    return Math.floor(s/86400)+'d ago';
+  }
+
+  function paint(){
+    var now = new Date(), open = 0, g = {};
+    ZONES.forEach(function(z, i){
+      var t = parts(z[1], now);
+      g[z[2] || z[0]] = t;
+      var on = isOpen(z[2], t);
+      if (on) open++;
+      var el = document.getElementById('lz'+i);
+      el.querySelector('.v').textContent = t.hour+':'+t.minute+':'+t.second;
+      el.className = on ? 'lz on' : 'lz';
+    });
+    var h = g.HKG, n = g.NYC;
+
+    var msg, live = open > 0;
+    if (MODE !== 'private'){
+      /* Public: report only that markets are trading. Naming which session forms the signal
+         would identify the strategy, which this site deliberately does not disclose. */
+      msg = open
+        ? '<b>' + open + ' of 7 markets trading.</b> The book settles a session after its ' +
+          'close; the figures below move then, not on this clock.'
+        : '<b>All markets shut.</b> The figures below move when the next session settles.';
+      document.getElementById('statusline').className = 'statusline' + (live ? ' live' : '');
+      document.getElementById('statusBody').innerHTML = msg;
+      var b0 = new Date(BUILT);
+      var ev0 = nextEvent(now);
+      document.getElementById('statusMeta').innerHTML =
+        'positions and P&amp;L last settled ' + SETTLED +
+        ' &nbsp;·&nbsp; figures generated ' + ago(now - b0) +
+        (ev0 ? ' &nbsp;·&nbsp; ' + ev0.label + ' ' + ev0.what + ' in ' + clock(ev0.secs) : '');
+      return;
+    }
+    /* The book's own cycle: Hong Kong forms the signal, New York trades it, then it settles. */
+    live = false;
+    if (isOpen('HKG', h)){
+      live = true;
+      var toClose = (h.mins < 720 ? 720 : 960) - h.mins;
+      msg = '<b>Hong Kong is open.</b> This session is still forming the signal this book ' +
+            'trades &mdash; ' + hm(toClose) + ' until the ' +
+            (h.mins < 720 ? 'lunch break' : 'close') + '.';
+    } else if (isOpen('NYC', n)){
+      live = true;
+      msg = '<b>New York is open.</b> Positions opened against the Hong Kong close are ' +
+            'working now &mdash; ' + hm(960 - n.mins) + ' until the bell.';
+    } else if (h.wd === 0 || h.wd === 6){
+      msg = '<b>Weekend.</b> Both markets are shut; the book is flat until Monday.';
+    } else if (h.mins < 570){
+      msg = '<b>Both markets shut.</b> Hong Kong opens in ' + hm(570 - h.mins) +
+            ', which is where the next signal comes from.';
+    } else {
+      msg = '<b>Both markets shut.</b> Hong Kong has closed and New York has not opened; ' +
+            'the next session settles after the New York bell.';
+    }
+    document.getElementById('statusline').className = 'statusline' + (live ? ' live' : '');
+    document.getElementById('statusBody').innerHTML = msg;
+
+    var built = new Date(BUILT);
+    var ev = nextEvent(now);
+    document.getElementById('statusMeta').innerHTML =
+      'positions and P&amp;L last settled ' + SETTLED +
+      ' &nbsp;·&nbsp; figures generated ' + ago(now - built) +
+      (ev ? ' &nbsp;·&nbsp; ' + ev.label + ' ' + ev.what + ' in ' + clock(ev.secs) : '') +
+      ' &nbsp;·&nbsp; the money figures move only when a session settles, not on this clock';
+  }
+  paint(); setInterval(paint, 1000);
+})();
+</script>
+<!-- live-status:end -->
 <section class="lede">
   <div class="kicker">Systematic strategy &middot; live paper book</div>
   <h1>Live paper-trading book</h1>
-  <p class="dek">The cross-listing arbitrage strategy running in real time on live daily data.</p>
 </section>
 
 <div class="notice">
@@ -83,19 +268,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   the methodology: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
 </div>
 
-<div class="notice update">
-  <span class="tag">Update</span>
-  <p>Two risk overlays are now live in this ledger, both validated walk-forward after digging
-  into where the largest historical drawdowns actually came from: a two-sided liquidity filter
-  (dropping legs too thin to fill at this book's size <em>and</em> legs too liquid to carry real
-  edge) and a smooth VIX-based de-risking of exposure. See the
-  <a href="backtest.html">backtest page</a> for the full methodology and a capacity disclosure —
-  this is a concentrated, small-cap book with a real ceiling on how much it can absorb. A
-  separate intraday entry-timing refinement was investigated too but isn't used: what looked
-  like a clean improvement on a straight in-sample/out-of-sample split turned out, on closer
-  inspection, to be an average of a genuinely good sub-population and a significantly worse one,
-  with no real-time-available way found yet to tell them apart.</p>
-</div>
 
 <section style="margin-top:0">
   <div class="progress-row">
@@ -113,23 +285,13 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   </div>
 
   <div class="card" style="margin-top:16px">
-    <h3>Trading fees assumed (moomoo)</h3>
-    <p class="cap" style="margin-top:0">Round-trip, at a representative $7,500 per-pair
-    position — moomoo's published retail fee schedule, HK stocks and US stocks.</p>
-    <table class="data">
-      <thead><tr><th>Leg</th><th>Broker (moomoo)</th><th>Exchange / regulatory</th>
-        <th>Government tax</th><th>Total</th></tr></thead>
-      <tbody>
-        <tr><td>HK (buy + sell)</td><td>11.1bps</td><td>2.4bps</td><td>20.0bps</td><td>33.5bps</td></tr>
-        <tr><td>US (short + cover)</td><td>0.0bps</td><td>0.2bps</td><td>—</td><td>0.2bps</td></tr>
-      </tbody>
-    </table>
-    <p class="cap">HK broker fee: 0.03% commission (min HK$3) + HK$15/order platform fee.
-    Exchange/regulatory: trading tariff, settlement fee, HKEX trading fee, SFC/FRC levy. Government:
-    HK stamp duty, 0.1% each way. US stocks carry $0 commission and $0 platform fee on moomoo's
-    resident schedule; the SEC fee and TAF apply only on the sell/cover side and are near-zero.
-    <b>Not included:</b> the stock-borrow cost for shorting the ADR leg, which moomoo prices
-    per-security and isn't published as a flat rate — a real cost this doesn't capture.</p>
+    <h3>Trading fees</h3>
+    <p class="cap" style="margin-top:0">Every position in this ledger is charged at moomoo's
+    published retail brokerage rates &mdash;
+    <a href="https://www.moomoo.com/au/pricing" target="_blank" rel="noopener">moomoo's fee
+    schedule</a> &mdash; including exchange, regulatory and government charges where they apply.
+    One cost is not captured: financing and borrow, which the broker prices per security rather
+    than publishing as a flat rate.</p>
   </div>
 </section>
 
