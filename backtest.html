@@ -75,23 +75,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   in more depth, reach out: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
 </div>
 
-<div class="notice update">
-  <span class="tag">Update</span>
-  <p>Two risk overlays are now baked into the strategy shown here, both found by digging into
-  where the largest historical drawdowns actually came from. A two-sided liquidity filter drops
-  names on <em>both</em> ends of the turnover distribution: the most liquid legs turned out to
-  have the thinnest, sometimes negative, edge, since the local market's own opening auction
-  already absorbs most of the overnight gap before this trade can reach it — and the least liquid
-  legs implied a position bigger than a meaningful share of that name's entire daily volume, which
-  isn't a real fill regardless of what the edge looks like on paper. Exposure also now scales down
-  smoothly when VIX is elevated, which is where the two sharpest historical drawdowns actually
-  sat. All three were checked walk-forward before being folded in — happy to go through the
-  methodology by email. An intraday entry-timing idea was <em>also</em> tested and, after several
-  rounds of checking, wasn't validated — see the <a href="paper-trading.html">paper-trading
-  page</a>. A transaction-cost breakdown across trader-fee tiers, and whether this construction
-  holds up in other markets, is on the <a href="markets.html">cost model &amp; market expansion
-  page</a>.</p>
-</div>
 
 <section>
   <div class="stats" id="statTiles"></div>
