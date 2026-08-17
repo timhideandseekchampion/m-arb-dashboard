@@ -67,18 +67,24 @@ td.neg{color:var(--crit-ink)} td.pos{color:var(--good-ink)}
 .scroll{max-height:320px;overflow-y:auto}
 footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
 
-.livebar{display:flex;justify-content:flex-end;align-items:flex-start;gap:10px;flex-wrap:wrap;
-  margin:0 0 18px}
-.lz{background:var(--surface);border:1px solid var(--hair);border-radius:9px;padding:7px 11px;
-  min-width:104px}
-.lz .n{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
-  display:flex;align-items:center;gap:5px}
+/* live-status-css:start */
+/* The strip breaks out of the text column so all eight zones sit on one line: the column is
+   sized for reading prose, not for a row of clocks. Centred on the viewport, right-aligned
+   within itself, and horizontally scrollable rather than wrapping on a narrow screen. */
+.livebar{display:flex;justify-content:flex-end;align-items:flex-start;gap:7px;flex-wrap:nowrap;
+  width:min(1160px, calc(100vw - 28px));margin:0 0 18px 50%;transform:translateX(-50%);
+  overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.livebar::-webkit-scrollbar{display:none}
+.lz{background:var(--surface);border:1px solid var(--hair);border-radius:9px;padding:6px 9px;
+  min-width:86px;flex:0 0 auto}
+.lz .n{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:4px;white-space:nowrap}
 .lz .n i{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;
   flex:0 0 auto}
 .lz.on .n i{background:var(--good)}
 .lz.on .n{color:var(--good-ink)}
-.lz .v{font-family:var(--mono);font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;
-  letter-spacing:-.01em;margin-top:2px}
+.lz .v{font-family:var(--mono);font-size:14.5px;font-weight:650;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin-top:2px;white-space:nowrap}
 @media (prefers-reduced-motion:no-preference){
   .lz.on .n i{animation:lpulse 2s ease-in-out infinite}
 }
@@ -94,16 +100,10 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 .statusline .body{font-size:13.5px;color:var(--ink-2);line-height:1.5}
 .statusline .body b{color:var(--ink)}
 .statusline .meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:4px}
-
+/* live-status-css:end */
 </style>
 
 <div class="wrap">
-
-
-
-
-
-
 
 
 <!-- live-status:start -->
@@ -114,8 +114,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   <div class="lz" id="lz3"><div class="n"><i></i>Hong Kong</div><div class="v">--:--:--</div></div>
   <div class="lz" id="lz4"><div class="n"><i></i>Seoul</div><div class="v">--:--:--</div></div>
   <div class="lz" id="lz5"><div class="n"><i></i>Taipei</div><div class="v">--:--:--</div></div>
-  <div class="lz" id="lz6"><div class="n"><i></i>Sydney</div><div class="v">--:--:--</div></div>
-  <div class="lz" id="lz7"><div class="n"><i></i>New York</div><div class="v">--:--:--</div></div>
+  <div class="lz" id="lz6"><div class="n"><i></i>New York</div><div class="v">--:--:--</div></div>
 </div>
 <div class="statusline" id="statusline">
   <div class="dot"></div>
@@ -127,8 +126,8 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-08-13";      /* last session the ledger has priced */
-  var BUILT   = "2026-08-17T10:20:12+00:00";        /* when these figures were generated, UTC */
-  var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["Sydney", "Australia/Sydney", "SYD"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
+  var BUILT   = "2026-08-17T10:29:06+00:00";        /* when these figures were generated, UTC */
+  var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
   var SESS = {
@@ -137,8 +136,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
     TYO: [[540,690],[750,930]],
     SHA: [[570,690],[780,900]],
     SEL: [[540,930]],
-    TPE: [[540,810]],
-    SYD: [[600,960]]
+    TPE: [[540,810]]
   };
 
   function parts(tz, d){
@@ -207,7 +205,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
       /* Public: report only that markets are trading. Naming which session forms the signal
          would identify the strategy, which this site deliberately does not disclose. */
       msg = open
-        ? '<b>' + open + ' of 7 markets trading.</b> The book settles a session after its ' +
+        ? '<b>' + open + ' of 6 markets trading.</b> The book settles a session after its ' +
           'close; the figures below move then, not on this clock.'
         : '<b>All markets shut.</b> The figures below move when the next session settles.';
       document.getElementById('statusline').className = 'statusline' + (live ? ' live' : '');
