@@ -1,0 +1,317 @@
+<title>Live Paper Trading</title>
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f3f5f7; --surface:#ffffff; --surface-2:#f8f9fb;
+  --ink:#11151b; --ink-2:#4a5361; --muted:#818a94;
+  --hair:rgba(17,21,27,0.11); --hair-strong:rgba(17,21,27,0.22);
+  --accent:#2f5182; --accent-ink:#1f3556;
+  --good:#0ca30c; --crit:#d03b3b;
+  --good-ink:#0a6e0a; --crit-ink:#a72e2e;
+  --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme:dark;
+    --plane:#0b0d10; --surface:#15181d; --surface-2:#1a1e24;
+    --ink:#eef1f4; --ink-2:#b7c0c9; --muted:#838d97;
+    --hair:rgba(255,255,255,0.11); --hair-strong:rgba(255,255,255,0.22);
+    --accent:#8fb0de; --accent-ink:#aecaf0;
+    --good:#0ca30c; --crit:#e2635a;
+    --good-ink:#3fd23f; --crit-ink:#ff9d94;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--plane);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:920px;margin:0 auto;padding:56px 24px 100px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;text-wrap:balance;color:var(--ink)}
+h1{font-size:31px;line-height:1.15;margin:0 0 12px}
+h2{font-size:19px;margin:0 0 6px}
+h3{font-size:15px;margin:0 0 4px;font-weight:650}
+p{margin:0 0 13px;color:var(--ink-2);max-width:70ch}
+.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.dek{font-size:16.5px;color:var(--ink-2);max-width:66ch;margin-bottom:6px}
+section{margin-top:44px}
+section.lede{margin-top:0}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:22px 24px}
+.cap{font-size:13px;color:var(--muted);margin-top:10px;max-width:none}
+.notice{background:var(--surface-2);border:1px solid var(--hair);border-radius:12px;padding:18px 20px;margin:22px 0 8px}
+.notice p{margin:0;font-size:14px}
+.notice a{color:var(--accent-ink)}
+.notice.update{display:flex;gap:10px;align-items:flex-start}
+.notice.update .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--accent-ink);border:1px solid var(--hair-strong);border-radius:99px;padding:2px 9px;flex:none;margin-top:1px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 24px}
+.stat{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:16px 18px}
+.stat .v{font-size:23px;font-weight:650;letter-spacing:-.02em;line-height:1.1;font-family:var(--mono)}
+.stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+.stat.pos .v{color:var(--good-ink)} .stat.neg .v{color:var(--crit-ink)}
+@media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+.progress-row{display:flex;align-items:center;gap:14px;margin:6px 0 22px}
+.progress-track{flex:1;height:10px;border-radius:6px;background:var(--surface-2);border:1px solid var(--hair);overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:6px 0 0 6px}
+.progress-label{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.empty{padding:32px 0;text-align:center;color:var(--muted);font-size:14px}
+#equitychart, #ddchart, #tradeschart{display:block;width:100%;height:auto}
+.axis{fill:var(--muted);font-size:10.5px;font-family:var(--mono)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+table.data th, table.data td{padding:6px 12px 6px 0;text-align:right;white-space:nowrap}
+table.data th:first-child, table.data td:first-child{text-align:left}
+table.data th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--hair)}
+table.data td{border-bottom:1px solid var(--hair);font-family:var(--mono);font-variant-numeric:tabular-nums}
+table.data td:first-child{font-family:var(--sans)}
+table.data tr:last-child td{border-bottom:none}
+td.neg{color:var(--crit-ink)} td.pos{color:var(--good-ink)}
+.scroll{max-height:320px;overflow-y:auto}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
+</style>
+
+<div class="wrap">
+
+<section class="lede">
+  <div class="kicker">Systematic strategy &middot; live paper book</div>
+  <h1>Live paper-trading book</h1>
+  <p class="dek">The cross-listing arbitrage strategy running in real time on live daily data.</p>
+</section>
+
+<div class="notice">
+  <p><b>This is original research, not a published strategy.</b> This page shows performance
+  only — the instrument universe, signal thresholds, and cost model are my own and aren't
+  disclosed here. Developed and tested independently — get in touch if you'd like to discuss
+  the methodology: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
+</div>
+
+<div class="notice update">
+  <span class="tag">Update</span>
+  <p>Two risk overlays are now live in this ledger, both validated walk-forward after digging
+  into where the largest historical drawdowns actually came from: a two-sided liquidity filter
+  (dropping legs too thin to fill at this book's size <em>and</em> legs too liquid to carry real
+  edge) and a smooth VIX-based de-risking of exposure. See the
+  <a href="backtest.html">backtest page</a> for the full methodology and a capacity disclosure —
+  this is a concentrated, small-cap book with a real ceiling on how much it can absorb. A
+  separate intraday entry-timing refinement was investigated too but isn't used: what looked
+  like a clean improvement on a straight in-sample/out-of-sample split turned out, on closer
+  inspection, to be an average of a genuinely good sub-population and a significantly worse one,
+  with no real-time-available way found yet to tell them apart.</p>
+</div>
+
+<section style="margin-top:0">
+  <div class="progress-row">
+    <div class="progress-label" id="progressLabel"></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressPct"></div>
+  </div>
+  <div class="stats" id="statTiles"></div>
+
+  <div class="card">
+    <h3>Equity curve</h3>
+    <div id="equityWrap"></div>
+    <h3 style="margin-top:18px" id="ddTitle">Drawdown</h3>
+    <div id="ddWrap"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Trading fees assumed (moomoo)</h3>
+    <p class="cap" style="margin-top:0">Round-trip, at a representative $7,500 per-pair
+    position — moomoo's published retail fee schedule, HK stocks and US stocks.</p>
+    <table class="data">
+      <thead><tr><th>Leg</th><th>Broker (moomoo)</th><th>Exchange / regulatory</th>
+        <th>Government tax</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>HK (buy + sell)</td><td>11.1bps</td><td>2.4bps</td><td>20.0bps</td><td>33.5bps</td></tr>
+        <tr><td>US (short + cover)</td><td>0.0bps</td><td>0.2bps</td><td>—</td><td>0.2bps</td></tr>
+      </tbody>
+    </table>
+    <p class="cap">HK broker fee: 0.03% commission (min HK$3) + HK$15/order platform fee.
+    Exchange/regulatory: trading tariff, settlement fee, HKEX trading fee, SFC/FRC levy. Government:
+    HK stamp duty, 0.1% each way. US stocks carry $0 commission and $0 platform fee on moomoo's
+    resident schedule; the SEC fee and TAF apply only on the sell/cover side and are near-zero.
+    <b>Not included:</b> the stock-borrow cost for shorting the ADR leg, which moomoo prices
+    per-security and isn't published as a flat rate — a real cost this doesn't capture.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Trades, running total</h2>
+  <div class="card">
+    <div id="tradesWrap"></div>
+    <div class="cap" id="tradesCap"></div>
+  </div>
+</section>
+
+<section>
+  <h2>Trade log</h2>
+  <div class="card">
+    <div class="scroll" id="tradeLogWrap"></div>
+  </div>
+</section>
+
+<footer>
+  Performance shown net of estimated trading costs. Past performance is not indicative of
+  future results.
+</footer>
+
+</div>
+
+<script type="application/json" id="ledger-data">{"start_date":"2026-08-12","end_target":"2027-05-09","capital":100552.26323716492,"last_date":"2026-08-12","days":[{"date":"2026-08-12","n_names":4,"net_bps":55.23,"capital":100552.26}]}</script>
+
+<script>
+(function(){
+  var L = JSON.parse(document.getElementById('ledger-data').textContent);
+  var ns = "http://www.w3.org/2000/svg";
+  function el(tag, attrs){
+    var e = document.createElementNS(ns, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function fmtUSD(v){ return '$' + v.toLocaleString(undefined, {maximumFractionDigits:0}); }
+  var STARTING_CAPITAL = 100000;
+
+  var start = new Date(L.start_date), endTarget = new Date(L.end_target), last = new Date(L.last_date);
+  var elapsedDays = Math.round((last - start) / 86400000);
+  var totalDays = Math.round((endTarget - start) / 86400000);
+  var pct = Math.min(100, Math.max(0, elapsedDays/totalDays*100));
+  document.getElementById('progressFill').style.width = pct.toFixed(0)+'%';
+  document.getElementById('progressLabel').textContent = 'Day ' + elapsedDays + ' of ' + totalDays;
+  document.getElementById('progressPct').textContent = pct.toFixed(0)+'%';
+
+  var days = L.days || [];
+  var capital = L.capital;
+  var totalRet = (capital/STARTING_CAPITAL - 1) * 100;
+  var totalTrades = days.reduce(function(a,d){ return a + d.n_names; }, 0);
+
+  var tiles = [
+    {l:"Starting capital", v: fmtUSD(STARTING_CAPITAL), cls:""},
+    {l:"Current capital", v: fmtUSD(capital), cls: capital>=STARTING_CAPITAL?"pos":"neg"},
+    {l:"Total return", v: (totalRet>=0?'+':'')+totalRet.toFixed(2)+'%', cls: totalRet>=0?"pos":"neg"},
+    {l:"Total trades", v: totalTrades.toLocaleString(), cls:""},
+  ];
+
+  if (days.length >= 5) {
+    var net = days.map(function(d){ return d.net_bps/1e4; });
+    var mean = net.reduce(function(a,b){return a+b},0)/net.length;
+    var variance = net.reduce(function(a,b){return a+(b-mean)*(b-mean)},0)/(net.length-1);
+    var sd = Math.sqrt(variance);
+    var sharpe = mean/sd*Math.sqrt(252);
+    var equity = days.map(function(d){ return d.capital; });
+    var peak = [], pk = STARTING_CAPITAL;
+    equity.forEach(function(v){ pk = Math.max(pk, v); peak.push(pk); });
+    var dd = equity.map(function(v,i){ return (v-peak[i])/peak[i]*100; });
+    tiles.push({l:"Sharpe so far", v: sharpe.toFixed(2), cls: sharpe>=0?"pos":"neg"});
+    tiles.push({l:"Max drawdown", v: Math.min.apply(null, dd).toFixed(1)+'%', cls:"neg"});
+  } else {
+    tiles.push({l:"Realized days", v: days.length, cls:""});
+    tiles.push({l:"Status", v:"warming up", cls:""});
+  }
+
+  document.getElementById('statTiles').innerHTML = tiles.map(function(t){
+    return '<div class="stat '+t.cls+'"><div class="v">'+t.v+'</div><div class="l">'+t.l+'</div></div>';
+  }).join('');
+
+  if (days.length === 0) {
+    document.getElementById('equityWrap').innerHTML =
+      '<div class="empty">No realized trading days yet.</div>';
+    document.getElementById('ddTitle').style.display = 'none';
+    document.getElementById('tradesWrap').innerHTML = '<div class="empty">Nothing to show yet.</div>';
+    document.getElementById('tradeLogWrap').innerHTML = '<div class="empty">Nothing to show yet.</div>';
+    return;
+  }
+
+  var equityArr = [STARTING_CAPITAL].concat(days.map(function(d){return d.capital}));
+  var dateArr = [L.start_date].concat(days.map(function(d){return d.date}));
+  (function(){
+    var svg = el('svg', {id:'equitychart', viewBox:'0 0 920 300'});
+    document.getElementById('equityWrap').appendChild(svg);
+    var W=920,H=300,padL=64,padR=16,padT=14,padB=28;
+    var lo = Math.min(STARTING_CAPITAL, Math.min.apply(null, equityArr))*0.98;
+    var hi = Math.max(STARTING_CAPITAL, Math.max.apply(null, equityArr))*1.02;
+    if (lo === hi) { lo *= 0.98; hi *= 1.02; }
+    var pw=W-padL-padR, ph=H-padT-padB, n=equityArr.length;
+    function X(i){ return n>1 ? padL+pw*i/(n-1) : padL; }
+    function Y(v){ return padT+ph*(1-(v-lo)/(hi-lo)); }
+    [lo, (lo+hi)/2, hi].forEach(function(v){
+      svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:Y(v),y2:Y(v),stroke:'var(--hair)','stroke-width':1}));
+      var t=el('text',{x:padL-8,y:Y(v)+4,'text-anchor':'end',class:'axis'}); t.textContent=fmtUSD(v); svg.appendChild(t);
+    });
+    svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:Y(STARTING_CAPITAL),y2:Y(STARTING_CAPITAL),stroke:'var(--hair-strong)','stroke-width':1,'stroke-dasharray':'3,3'}));
+    if (n > 1) {
+      var pts = equityArr.map(function(v,i){ return X(i).toFixed(1)+' '+Y(v).toFixed(1); }).join(' L ');
+      svg.appendChild(el('path',{d:'M '+pts,fill:'none',stroke:'var(--accent)','stroke-width':2}));
+    }
+    equityArr.forEach(function(v,i){
+      svg.appendChild(el('circle',{cx:X(i),cy:Y(v),r:3,fill:'var(--accent)'}));
+    });
+    var step = Math.max(Math.floor(n/5),1);
+    for (var i=0;i<n;i+=step){
+      var tx=el('text',{x:X(i),y:H-8,'text-anchor':'middle',class:'axis'}); tx.textContent=dateArr[i].slice(5);
+      svg.appendChild(tx);
+    }
+  })();
+
+  if (days.length >= 5) {
+    (function(){
+      var svg = el('svg', {id:'ddchart', viewBox:'0 0 920 130'});
+      document.getElementById('ddWrap').appendChild(svg);
+      var W=920,H=130,padL=64,padR=16,padT=10,padB=24;
+      var equity = days.map(function(d){return d.capital});
+      var peak = [], pk = STARTING_CAPITAL;
+      equity.forEach(function(v){ pk=Math.max(pk,v); peak.push(pk); });
+      var dd = equity.map(function(v,i){ return (v-peak[i])/peak[i]*100; });
+      var lo = Math.min.apply(null, dd)*1.1 || -1;
+      var pw=W-padL-padR, ph=H-padT-padB, n=dd.length;
+      function X(i){ return n>1 ? padL+pw*i/(n-1) : padL; }
+      function Y(v){ return padT+ph*(v/lo); }
+      svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:Y(0),y2:Y(0),stroke:'var(--hair-strong)','stroke-width':1}));
+      var t0=el('text',{x:padL-8,y:Y(0)+4,'text-anchor':'end',class:'axis'}); t0.textContent='0%'; svg.appendChild(t0);
+      var t1=el('text',{x:padL-8,y:Y(lo)+4,'text-anchor':'end',class:'axis'}); t1.textContent=lo.toFixed(0)+'%'; svg.appendChild(t1);
+      var pts = dd.map(function(v,i){ return X(i).toFixed(1)+' '+Y(v).toFixed(1); }).join(' L ');
+      svg.appendChild(el('polygon',{points: X(0)+' '+Y(0)+' '+pts+' '+X(n-1)+' '+Y(0), fill:'var(--crit)', opacity:0.25}));
+      svg.appendChild(el('path',{d:'M '+pts,fill:'none',stroke:'var(--crit)','stroke-width':1.3}));
+    })();
+  } else {
+    document.getElementById('ddTitle').style.display = 'none';
+  }
+
+  (function(){
+    var cum = [], running = 0;
+    days.forEach(function(d){ running += d.n_names; cum.push(running); });
+    var cumArr = [0].concat(cum);
+    var svg = el('svg', {id:'tradeschart', viewBox:'0 0 920 220'});
+    document.getElementById('tradesWrap').appendChild(svg);
+    var W=920,H=220,padL=54,padR=16,padT=14,padB=28;
+    var hi = Math.max(1, Math.max.apply(null, cumArr)) * 1.08;
+    var pw=W-padL-padR, ph=H-padT-padB, n=cumArr.length;
+    function X(i){ return n>1 ? padL+pw*i/(n-1) : padL; }
+    function Y(v){ return padT+ph*(1-v/hi); }
+    [0, hi/2, hi].forEach(function(v){
+      svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:Y(v),y2:Y(v),stroke:'var(--hair)','stroke-width':1}));
+      var t=el('text',{x:padL-8,y:Y(v)+4,'text-anchor':'end',class:'axis'}); t.textContent=Math.round(v); svg.appendChild(t);
+    });
+    var d = 'M ' + X(0) + ' ' + Y(cumArr[0]).toFixed(1);
+    for (var i=1;i<n;i++){
+      d += ' L ' + X(i).toFixed(1) + ' ' + Y(cumArr[i-1]).toFixed(1);
+      d += ' L ' + X(i).toFixed(1) + ' ' + Y(cumArr[i]).toFixed(1);
+    }
+    svg.appendChild(el('path',{d:d,fill:'none',stroke:'var(--accent)','stroke-width':2}));
+    var dateArr2 = [L.start_date].concat(days.map(function(dd){return dd.date}));
+    var step = Math.max(Math.floor(n/5),1);
+    for (var i=0;i<n;i+=step){
+      var tx=el('text',{x:X(i),y:H-8,'text-anchor':'middle',class:'axis'}); tx.textContent=dateArr2[i].slice(5);
+      svg.appendChild(tx);
+    }
+    document.getElementById('tradesCap').textContent =
+      totalTrades + ' total trades so far across ' + days.length + ' realized trading day(s).';
+  })();
+
+  var rows = days.slice().reverse().map(function(d){
+    var cls = d.net_bps >= 0 ? 'pos' : 'neg';
+    return '<tr><td>'+d.date+'</td><td>'+d.n_names+'</td><td class="'+cls+'">'+
+      (d.net_bps>=0?'+':'')+d.net_bps.toFixed(1)+'</td><td>'+fmtUSD(d.capital)+'</td></tr>';
+  }).join('');
+  document.getElementById('tradeLogWrap').innerHTML =
+    '<table class="data"><thead><tr><th>Date</th><th>Trades</th><th>Net bps</th><th>Capital</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table>';
+})();
+</script>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Systematic Trading Strategy</title>
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f3f5f7; --surface:#ffffff; --surface-2:#f8f9fb;
+  --ink:#11151b; --ink-2:#4a5361; --muted:#818a94;
+  --hair:rgba(17,21,27,0.11); --hair-strong:rgba(17,21,27,0.22);
+  --accent:#2f5182; --accent-ink:#1f3556;
+  --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme:dark;
+    --plane:#0b0d10; --surface:#15181d; --surface-2:#1a1e24;
+    --ink:#eef1f4; --ink-2:#b7c0c9; --muted:#838d97;
+    --hair:rgba(255,255,255,0.11); --hair-strong:rgba(255,255,255,0.22);
+    --accent:#8fb0de; --accent-ink:#aecaf0;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--plane);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px;margin:0 auto;padding:80px 24px 100px}
+h1{font-family:var(--serif);font-size:34px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
+p.dek{font-size:17px;color:var(--ink-2);max-width:64ch;margin:0 0 24px}
+.notice{background:var(--surface-2);border:1px solid var(--hair);border-radius:12px;padding:18px 20px;margin:0 0 36px}
+.notice p{margin:0;font-size:14px;color:var(--ink-2)}
+.notice a{color:var(--accent-ink)}
+.cards{display:flex;flex-direction:column;gap:16px}
+a.card{display:block;background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:22px 24px;
+  text-decoration:none;color:inherit;transition:border-color .15s}
+a.card:hover{border-color:var(--hair-strong)}
+a.card h2{font-family:var(--serif);font-size:19px;margin:0 0 6px;color:var(--ink)}
+a.card p{margin:0;font-size:14px;color:var(--ink-2)}
+a.card .arrow{float:right;color:var(--accent);font-family:var(--mono)}
+footer{margin-top:60px;font-size:12.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Systematic Trading Strategy</div>
+  <h1>A cost-aware, walk-forward-tested cross-listing arbitrage strategy</h1>
+  <p class="dek">A US-listed depositary receipt and its home-market ordinary share trade on
+  different session clocks — this strategy targets the price gap that opens up across that
+  handoff, priced net of realistic transaction costs and validated on a walk-forward split, now
+  running forward as a live paper book.</p>
+
+  <div class="notice">
+    <p><b>This is original research, not a published strategy.</b> The instrument universe,
+    signal thresholds, and cost model are my own and aren't disclosed here — these pages show
+    performance only. Built and backtested independently — happy to discuss the methodology in
+    more depth: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
+  </div>
+
+  <div class="cards">
+    <a class="card" href="backtest.html">
+      <span class="arrow">&rarr;</span>
+      <h2>Backtest: $100,000, compounded</h2>
+      <p>Full-history backtest — equity curve, Sharpe, drawdown, net of modeled trading costs.</p>
+    </a>
+    <a class="card" href="paper-trading.html">
+      <span class="arrow">&rarr;</span>
+      <h2>Live paper trading book</h2>
+      <p>The same strategy, running forward in real time against a 9-month evaluation window —
+      updated periodically as new trading days settle.</p>
+    </a>
+    <a class="card" href="markets.html">
+      <span class="arrow">&rarr;</span>
+      <h2>Cost model &amp; market expansion</h2>
+      <p>A transaction-cost breakdown across trader-fee tiers, and whether the same construction
+      holds up in Korea, Japan and Taiwan the way it does in Hong Kong.</p>
+    </a>
+  </div>
+
+  <footer>Static pages, no backend. Last updated when this site was published.</footer>
+</div>
+</body>
+</html>
