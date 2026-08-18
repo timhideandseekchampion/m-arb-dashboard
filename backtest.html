@@ -86,6 +86,31 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   </div>
 </section>
 
+<!-- neutrality:start -->
+<section>
+  <h2>Is it actually market neutral?</h2>
+  <div class="card">
+    <p>The book holds two offsetting legs, so it should carry no market exposure. That is a
+    testable claim rather than a design note, and this is the test: the daily return regressed
+    on six benchmarks spanning both trading sessions, with Newey&ndash;West standard errors
+    throughout.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Benchmark</th><th>Beta</th><th>t</th><th>p</th><th>Correlation</th>
+        <th>R&sup2;</th></tr></thead>
+      <tbody><tr><td>US broad market</td><td>-0.043</td><td class="dim">-1.43</td><td class="dim">0.15</td><td>-0.036</td><td class="dim">0.13%</td></tr><tr><td>US large-cap technology</td><td>-0.026</td><td class="dim">-1.04</td><td class="dim">0.30</td><td>-0.027</td><td class="dim">0.07%</td></tr><tr><td>Home market, broad</td><td>-0.017</td><td class="dim">-0.56</td><td class="dim">0.58</td><td>-0.018</td><td class="dim">0.03%</td></tr><tr><td>Home market, large-cap</td><td>-0.017</td><td class="dim">-0.60</td><td class="dim">0.55</td><td>-0.020</td><td class="dim">0.04%</td></tr><tr><td>Home market, technology</td><td>-0.007</td><td class="dim">-0.35</td><td class="dim">0.73</td><td>-0.011</td><td class="dim">0.01%</td></tr><tr><td>Sector, US-listed</td><td>-0.002</td><td class="dim">-0.09</td><td class="dim">0.93</td><td>-0.003</td><td class="dim">0.00%</td></tr></tbody>
+    </table></div>
+    <div class="cap">The largest beta anywhere in the table is
+    0.043 and not one is statistically distinguishable from zero. R&sup2; never
+    reaches 0.13%, so no benchmark explains even a fifth of one percent of
+    the variance. Alpha comes out at essentially the entire return, 55%
+    annualised at t&thinsp;=&thinsp;6.62.</div>
+    <p class="cap" style="margin-top:12px">Six rather than one because a book with a leg in each
+    session has no single market to be neutral to. The benchmarks are named by what they measure
+    rather than by ticker, for the reason given at the top of this page.</p>
+  </div>
+</section>
+<!-- neutrality:end -->
+
 <section>
   <h2>Capacity</h2>
   <div class="card">
