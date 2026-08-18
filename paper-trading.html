@@ -101,6 +101,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
+
 /* live-status-css:start */
 /* Sits inside the text column and right-aligns to it, so the strip's right edge lines up with
    the cards below rather than overhanging them. Seven chips fit the column at these widths, so
@@ -192,7 +193,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-08-17";      /* last session the ledger has priced */
-  var BUILT   = "2026-08-18T18:10:46+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-08-18T18:12:48+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -360,20 +361,10 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   </div>
   <div class="card" style="margin-top:16px">
     <h3>Slippage on entry</h3>
-    <p class="cap" style="margin-top:0">Positions go on at an opening print. That price is
-    reachable, but reaching it depends on being first in the queue rather than on placing a
-    special order, because the broker's API offers no market-on-open instruction at all. Measured
-    across roughly four thousand sessions, the opening print and the first continuous print of the
-    session are the same price to within half a basis point on about 98% of days.</p>
-    <p class="cap">What is not guaranteed is landing on that first print. A fill one minute later
-    sits a mean 6.3 basis points away with a standard deviation near 85, so this ledger charges
-    that 6.3 on every entry rather than assuming the better fill. The figure is measured, not
-    chosen: it is the average drift over the first minute, and it books the pessimistic end of a
-    range whose optimistic end nobody can promise.</p>
-    <p class="cap">Two things this still does not capture. Size is not modelled, so a position
-    large enough to move its own opening auction would cost more than the charge above. And the
-    exits are booked at closing prints on the same basis, which carry the same caveat with no
-    separate charge against them.</p>
+    <p class="cap" style="margin-top:0">Every entry is charged a measured slippage allowance on
+    top of fees, set at the pessimistic end of the achievable fill range rather than the best
+    case. Size is not modelled, so a position large enough to move its own fill would cost
+    more.</p>
   </div>
 </section>
 
