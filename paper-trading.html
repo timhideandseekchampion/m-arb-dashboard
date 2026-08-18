@@ -43,11 +43,13 @@ section.lede{margin-top:0}
 .notice.update{display:flex;gap:10px;align-items:flex-start}
 .notice.update .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;
   color:var(--accent-ink);border:1px solid var(--hair-strong);border-radius:99px;padding:2px 9px;flex:none;margin-top:1px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 24px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 24px}
+.stat.dim .v{color:var(--muted);font-size:19px}
 .stat{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:16px 18px}
 .stat .v{font-size:23px;font-weight:650;letter-spacing:-.02em;line-height:1.1;font-family:var(--mono)}
 .stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
 .stat.pos .v{color:var(--good-ink)} .stat.neg .v{color:var(--crit-ink)}
+@media (max-width:980px){.stats{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
 .progress-row{display:flex;align-items:center;gap:14px;margin:6px 0 22px}
 .progress-track{flex:1;height:10px;border-radius:6px;background:var(--surface-2);border:1px solid var(--hair);overflow:hidden}
@@ -66,6 +68,7 @@ table.data tr:last-child td{border-bottom:none}
 td.neg{color:var(--crit-ink)} td.pos{color:var(--good-ink)}
 .scroll{max-height:320px;overflow-y:auto}
 footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
+
 
 
 
@@ -164,6 +167,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
+
 <!-- live-status:start -->
 <div class="livebar">
   <div class="lz" id="lz0"><div class="n"><i></i>UTC</div><div class="v">--:--:--</div></div>
@@ -184,7 +188,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-08-17";      /* last session the ledger has priced */
-  var BUILT   = "2026-08-18T17:49:37+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-08-18T17:57:38+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -321,10 +325,8 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 </section>
 
 <div class="notice">
-  <p><b>This is original research, not a published strategy.</b> This page shows performance
-  only — the instrument universe, signal thresholds, and cost model are my own and aren't
-  disclosed here. Developed and tested independently — get in touch if you'd like to discuss
-  the methodology: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
+  <p><b>This is original research, not a published strategy.</b> This page shows performance only. The instrument universe, signal thresholds, cost model, and detailed trade logs are my own and aren't
+  disclosed here. Developed and tested independently. Get in touch if you'd like to discuss the methodology: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
 </div>
 
 
@@ -346,9 +348,9 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   <div class="card" style="margin-top:16px">
     <h3>Trading fees</h3>
     <p class="cap" style="margin-top:0">Every position in this ledger is charged at moomoo's
-    published retail brokerage rates &mdash;
+    published retail brokerage rates, per
     <a href="https://www.moomoo.com/au/pricing" target="_blank" rel="noopener">moomoo's fee
-    schedule</a> &mdash; including exchange, regulatory and government charges where they apply.
+    schedule</a>, including exchange, regulatory and government charges where they apply.
     One cost is not captured: financing and borrow, which the broker prices per security rather
     than publishing as a flat rate.</p>
   </div>
@@ -413,22 +415,42 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
     {l:"Total trades", v: totalTrades.toLocaleString(), cls:""},
   ];
 
-  if (days.length >= 5) {
+  /* Sharpe and Sortino always hold a tile, so the panel keeps its shape from the first day
+     rather than rearranging itself once the record is long enough to compute them. Both stay
+     blank until five realized days: on three observations a Sharpe is noise wearing a number,
+     and printing one would be the most misleading figure on the page. */
+  var MIN_DAYS = 5;
+  var ready = days.length >= MIN_DAYS;
+  var sharpeTxt = 'warming up', sortinoTxt = 'warming up', ddTxt = 'warming up';
+  var sharpeCls = 'dim', sortinoCls = 'dim';
+
+  if (ready) {
     var net = days.map(function(d){ return d.net_bps/1e4; });
     var mean = net.reduce(function(a,b){return a+b},0)/net.length;
     var variance = net.reduce(function(a,b){return a+(b-mean)*(b-mean)},0)/(net.length-1);
     var sd = Math.sqrt(variance);
     var sharpe = mean/sd*Math.sqrt(252);
+    /* Sortino divides by downside deviation only, so it separates the volatility that costs
+       money from the volatility that makes it. Measured against zero rather than the mean,
+       which is the convention that keeps it comparable across books. */
+    var down = net.filter(function(x){ return x < 0; });
+    var dsd = down.length
+      ? Math.sqrt(down.reduce(function(a,b){return a+b*b},0)/down.length)
+      : 0;
+    var sortino = dsd > 0 ? mean/dsd*Math.sqrt(252) : null;
     var equity = days.map(function(d){ return d.capital; });
     var peak = [], pk = STARTING_CAPITAL;
     equity.forEach(function(v){ pk = Math.max(pk, v); peak.push(pk); });
     var dd = equity.map(function(v,i){ return (v-peak[i])/peak[i]*100; });
-    tiles.push({l:"Sharpe so far", v: sharpe.toFixed(2), cls: sharpe>=0?"pos":"neg"});
-    tiles.push({l:"Max drawdown", v: Math.min.apply(null, dd).toFixed(1)+'%', cls:"neg"});
-  } else {
-    tiles.push({l:"Realized days", v: days.length, cls:""});
-    tiles.push({l:"Status", v:"warming up", cls:""});
+    sharpeTxt = sharpe.toFixed(2); sharpeCls = sharpe >= 0 ? 'pos' : 'neg';
+    sortinoTxt = sortino === null ? 'no losing days' : sortino.toFixed(2);
+    sortinoCls = sortino === null || sortino >= 0 ? 'pos' : 'neg';
+    ddTxt = Math.min.apply(null, dd).toFixed(1) + '%';
   }
+  tiles.push({l:"Sharpe so far", v: sharpeTxt, cls: sharpeCls});
+  tiles.push({l:"Sortino so far", v: sortinoTxt, cls: sortinoCls});
+  tiles.push({l:"Max drawdown", v: ddTxt, cls: ready ? "neg" : "dim"});
+  tiles.push({l:"Realized days", v: days.length + ' of ' + MIN_DAYS + ' needed', cls:"dim"});
 
   document.getElementById('statTiles').innerHTML = tiles.map(function(t){
     return '<div class="stat '+t.cls+'"><div class="v">'+t.v+'</div><div class="l">'+t.l+'</div></div>';
