@@ -41,6 +41,22 @@ a.card h2{font-family:var(--serif);font-size:19px;margin:0 0 6px;color:var(--ink
 a.card p{margin:0;font-size:14px;color:var(--ink-2)}
 a.card .arrow{float:right;color:var(--accent);font-family:var(--mono)}
 footer{margin-top:60px;font-size:12.5px;color:var(--muted)}
+
+
+/* index-stamp-css:start */
+.freshness{--fresh-dot:#3f9a5c;--stale-ink:#a8571c;--stale-dot:#d08325;
+  display:flex;justify-content:flex-end;align-items:baseline;gap:7px;flex-wrap:wrap;
+  margin:0 0 20px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.freshness b{font-weight:650;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.freshness .dot{width:6px;height:6px;border-radius:50%;background:var(--fresh-dot);
+  display:inline-block;align-self:center;flex:0 0 auto}
+.freshness.stale{color:var(--stale-ink)}
+.freshness.stale b{color:var(--stale-ink)}
+.freshness.stale .dot{background:var(--stale-dot)}
+@media (prefers-color-scheme: dark){
+  .freshness{--fresh-dot:#5cba79;--stale-ink:#e0a35c;--stale-dot:#e0a35c}
+}
+/* index-stamp-css:end */
 </style>
 </head>
 <body>
@@ -59,6 +75,52 @@ footer{margin-top:60px;font-size:12.5px;color:var(--muted)}
     methodology in more depth: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
   </div>
 
+
+
+<!-- index-stamp:start -->
+  <p class="freshness" id="freshness"></p>
+  <script>
+(function(){
+  var BUILT   = "2026-08-21T04:38:01+00:00";     /* when these pages were generated, UTC */
+  var SETTLED = "2026-08-19";   /* last session the ledger has priced */
+  var STALE_H = 30;
+
+  function ago(ms){
+    var s = Math.floor(ms / 1000);
+    if (s < 60)    return s + 's ago';
+    if (s < 3600)  return Math.floor(s / 60) + 'm ago';
+    if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+    var d = Math.floor(s / 86400);
+    return d + (d === 1 ? ' day ago' : ' days ago');
+  }
+
+  /* The settled date is the book's, not the clock's: it is the last session the ledger could
+     price, which trails today by a session because a position is only closed out on the next
+     one. Spelled out here so the gap reads as the book's design and not as a stalled refresh. */
+  function pretty(iso){
+    if (!iso || iso === 'not yet') return 'no session yet';
+    var p = iso.split('-');
+    var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return (+p[2]) + ' ' + m[+p[1] - 1] + ' ' + p[0];
+  }
+
+  function paint(){
+    var el = document.getElementById('freshness');
+    if (!el) return;
+    var age = Date.now() - Date.parse(BUILT);
+    var stale = age > STALE_H * 3600 * 1000;
+    el.className = 'freshness' + (stale ? ' stale' : '');
+    el.innerHTML = '<span class="dot"></span>' +
+      (stale ? 'these figures are stale &mdash; last rebuilt <b>' + ago(age) + '</b>'
+             : 'figures rebuilt <b>' + ago(age) + '</b>') +
+      ' &nbsp;&middot;&nbsp; books settled through <b>' + pretty(SETTLED) + '</b>';
+  }
+
+  paint();
+  setInterval(paint, 30000);   /* so a tab left open ages rather than freezing at load */
+})();
+</script>
+  <!-- index-stamp:end -->
   <div class="cards">
     <a class="card" href="backtest.html">
       <span class="arrow">&rarr;</span>
