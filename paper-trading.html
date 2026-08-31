@@ -340,8 +340,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
       el.querySelector('.v').textContent = t.hour+':'+t.minute+':'+t.second;
       el.className = on ? 'lz on' : 'lz';
     });
-    var h = g.HKG, n = g.NYC;
-
     var msg, live = open > 0;
     if (MODE !== 'private'){
       /* Public: report only that markets are trading. Naming which session forms the signal
@@ -360,40 +358,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
         (ev0 ? ' &nbsp;·&nbsp; ' + ev0.label + ' ' + ev0.what + ' in ' + clock(ev0.secs) : '');
       return;
     }
-    /* The book's own cycle: the home session forms the signal, New York trades it, then it
-       settles. The markets are named generically here on purpose. The clock strip above is a
-       world clock and gives nothing away, but this line describes the mechanism while it is
-       running, which is the one thing the public page does not disclose. */
-    live = false;
-    if (isOpen('HKG', h)){
-      live = true;
-      var toClose = (h.mins < 720 ? 720 : 960) - h.mins;
-      msg = '<b>The home session is open.</b> It is still forming the signal this book ' +
-            'trades. ' + hm(toClose) + ' until the ' +
-            (h.mins < 720 ? 'lunch break' : 'close') + '.';
-    } else if (isOpen('NYC', n)){
-      live = true;
-      msg = '<b>New York is open.</b> Positions opened against the prior close are ' +
-            'working now. ' + hm(960 - n.mins) + ' until the bell.';
-    } else if (h.wd === 0 || h.wd === 6){
-      msg = '<b>Weekend.</b> Both markets are shut; the book is flat until Monday.';
-    } else if (h.mins < 570){
-      msg = '<b>Both markets shut.</b> The home session opens in ' + hm(570 - h.mins) +
-            ', which is where the next signal comes from.';
-    } else {
-      msg = '<b>Both markets shut.</b> The home session has closed and New York has not ' +
-            'opened; the next settlement comes after the New York bell.';
-    }
-    document.getElementById('statusline').className = 'statusline' + (live ? ' live' : '');
-    document.getElementById('statusBody').innerHTML = msg;
-
-    var built = new Date(BUILT);
-    var ev = nextEvent(now);
-    document.getElementById('statusMeta').innerHTML =
-      'positions and P&amp;L last settled ' + SETTLED +
-      ' &nbsp;·&nbsp; figures generated ' + ago(now - built) +
-      (ev ? ' &nbsp;·&nbsp; ' + ev.label + ' ' + ev.what + ' in ' + clock(ev.secs) : '') +
-      ' &nbsp;·&nbsp; the money figures move only when a session settles, not on this clock';
   }
   paint(); setInterval(paint, 1000);
 })();
