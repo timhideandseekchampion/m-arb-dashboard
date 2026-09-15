@@ -281,6 +281,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
+
 <!-- live-status:start -->
 <div class="livebar">
   <div class="lz" id="lz0"><div class="n"><i></i>UTC</div><div class="v">--:--:--</div></div>
@@ -300,8 +301,8 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    live rather than stamped at build time. The money figures are not: they move only when the
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
-  var SETTLED = "2026-09-10";      /* last session the ledger has priced */
-  var BUILT   = "2026-09-14T01:32:11+00:00";        /* when these figures were generated, UTC */
+  var SETTLED = "2026-09-11";      /* last session the ledger has priced */
+  var BUILT   = "2026-09-15T01:24:51+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -498,7 +499,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 </div>
 
-<script type="application/json" id="ledger-data">{"start_date":"2026-08-12","end_target":"2027-05-09","capital":107902.83960386223,"last_date":"2026-09-09","days":[{"date":"2026-08-12","n_names":3,"net_bps":93.16,"capital":100931.6},{"date":"2026-08-13","n_names":5,"net_bps":-12.59,"capital":100804.56},{"date":"2026-08-14","n_names":4,"net_bps":52.88,"capital":101337.6},{"date":"2026-08-17","n_names":2,"net_bps":107.52,"capital":102427.16},{"date":"2026-08-18","n_names":4,"net_bps":-84.67,"capital":101559.91},{"date":"2026-08-19","n_names":9,"net_bps":76.57,"capital":102337.6},{"date":"2026-08-20","n_names":6,"net_bps":25.86,"capital":102602.2},{"date":"2026-08-21","n_names":4,"net_bps":11.13,"capital":102716.44},{"date":"2026-08-24","n_names":5,"net_bps":144.03,"capital":104195.89},{"date":"2026-08-25","n_names":8,"net_bps":63.52,"capital":104857.72},{"date":"2026-08-26","n_names":6,"net_bps":260.11,"capital":107585.21},{"date":"2026-08-27","n_names":1,"net_bps":32.5,"capital":107934.83},{"date":"2026-08-31","n_names":5,"net_bps":-25.32,"capital":107661.52},{"date":"2026-09-01","n_names":5,"net_bps":28.93,"capital":107972.99},{"date":"2026-09-02","n_names":2,"net_bps":54.14,"capital":108557.55},{"date":"2026-09-03","n_names":5,"net_bps":-19.67,"capital":108344.02},{"date":"2026-09-04","n_names":2,"net_bps":-122.9,"capital":107012.46},{"date":"2026-09-08","n_names":5,"net_bps":53.47,"capital":107584.66},{"date":"2026-09-09","n_names":10,"net_bps":29.57,"capital":107902.84}]}</script>
+<script type="application/json" id="ledger-data">{"start_date":"2026-08-12","end_target":"2027-05-09","capital":108181.25643233865,"last_date":"2026-09-10","days":[{"date":"2026-08-12","n_names":3,"net_bps":93.16,"capital":100931.6},{"date":"2026-08-13","n_names":5,"net_bps":-12.59,"capital":100804.56},{"date":"2026-08-14","n_names":4,"net_bps":52.88,"capital":101337.6},{"date":"2026-08-17","n_names":2,"net_bps":107.52,"capital":102427.16},{"date":"2026-08-18","n_names":4,"net_bps":-84.67,"capital":101559.91},{"date":"2026-08-19","n_names":9,"net_bps":76.57,"capital":102337.6},{"date":"2026-08-20","n_names":6,"net_bps":25.86,"capital":102602.2},{"date":"2026-08-21","n_names":4,"net_bps":11.13,"capital":102716.44},{"date":"2026-08-24","n_names":5,"net_bps":144.03,"capital":104195.89},{"date":"2026-08-25","n_names":8,"net_bps":63.52,"capital":104857.72},{"date":"2026-08-26","n_names":6,"net_bps":260.11,"capital":107585.21},{"date":"2026-08-27","n_names":1,"net_bps":32.5,"capital":107934.83},{"date":"2026-08-31","n_names":5,"net_bps":-25.32,"capital":107661.52},{"date":"2026-09-01","n_names":5,"net_bps":28.93,"capital":107972.99},{"date":"2026-09-02","n_names":2,"net_bps":54.14,"capital":108557.55},{"date":"2026-09-03","n_names":5,"net_bps":-19.67,"capital":108344.02},{"date":"2026-09-04","n_names":2,"net_bps":-122.9,"capital":107012.46},{"date":"2026-09-08","n_names":5,"net_bps":53.47,"capital":107584.66},{"date":"2026-09-09","n_names":10,"net_bps":29.57,"capital":107902.84},{"date":"2026-09-10","n_names":3,"net_bps":25.8,"capital":108181.26}]}</script>
 
 <script>
 (function(){
