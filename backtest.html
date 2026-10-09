@@ -112,6 +112,32 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 </section>
 <!-- neutrality:end -->
 
+<!-- cost-scenario:start -->
+<section>
+  <h2>Cost scenario: 10bps per round trip</h2>
+  <div class="card">
+    <p class="cap" style="margin-top:0">Every other figure on this page is priced at the broker's
+    published retail schedule: about 62bps for a round trip once taxes, commissions,
+    spreads and slippage are counted. This card re-runs the same $100,000 book with every round
+    trip, both legs, entry and exit, charged a flat 10bps all-in instead (about 2.5bps per
+    order), a cost level a market-making desk could plausibly reach. Signals, holding rule and
+    volume limits are unchanged; the entry rule scales with cost, so at this level it also
+    admits more trades.</p>
+    <table class="data">
+      <thead><tr><th>Cost per round trip</th><th>Ann. return</th><th>Sharpe</th>
+        <th>Max drawdown</th></tr></thead>
+      <tbody>
+        <tr><td>Retail schedule, about 62bps</td><td class="num">47.1%</td><td class="num">3.82</td><td class="num">-6.0%</td></tr>
+        <tr><td>Flat 10bps</td><td class="num">78.9%</td><td class="num">7.13</td><td class="num">-4.8%</td></tr>
+      </tbody>
+    </table>
+    
+    <p class="cap" style="margin-bottom:0">A hypothetical. The paper ledger and every other
+    figure on this site use the retail schedule.</p>
+  </div>
+</section>
+<!-- cost-scenario:end -->
+
 <section>
   <h2>Capacity</h2>
   <div class="card">
