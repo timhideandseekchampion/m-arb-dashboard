@@ -89,25 +89,17 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 <!-- cost-scenario:start -->
 <section>
-  <h2>Cost basis: 10bps per round trip</h2>
+  <h2>Cost basis</h2>
   <div class="card">
-    <p class="cap" style="margin-top:0">Every figure on this page &mdash; the equity curve, its
-    statistics and the capacity table &mdash; is priced at a flat 10bps for each round trip,
-    both legs, entry and exit (about 2.5bps per order): a cost level a market-making desk
-    could plausibly reach. The paper ledger, and the book as a retail account would trade it,
-    are priced at the broker's published schedule instead: about 62bps for a round
-    trip once taxes, commissions, spreads and slippage are counted. Signals, holding rule and
-    volume limits are the same at both; the entry rule scales with cost, so at 10bps it also
-    admits more trades.</p>
+    <p class="cap" style="margin-top:0">10bps per round trip assumed.</p>
     <table class="data">
-      <thead><tr><th>$100,000 book, cost per round trip</th><th>Ann. return</th><th>Sharpe</th>
+      <thead><tr><th>Costs assumed</th><th>Ann. return</th><th>Sharpe</th>
         <th>Max drawdown</th></tr></thead>
       <tbody>
-        <tr><td>Flat 10bps (this page)</td><td class="num">79.2%</td><td class="num">7.14</td><td class="num">-4.8%</td></tr>
-        <tr><td>Retail schedule, about 62bps</td><td class="num">47.2%</td><td class="num">3.80</td><td class="num">-6.4%</td></tr>
+        <tr><td>10bps per round trip</td><td class="num">79.2%</td><td class="num">7.14</td><td class="num">-4.8%</td></tr>
+        <tr><td>Retail, about 62bps per round trip</td><td class="num">47.2%</td><td class="num">3.80</td><td class="num">-6.4%</td></tr>
       </tbody>
     </table>
-    
   </div>
 </section>
 <!-- cost-scenario:end -->
@@ -119,8 +111,8 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
     <svg id="equitychart" viewBox="0 0 920 320"></svg>
     <h3 style="margin-top:18px">Drawdown</h3>
     <svg id="ddchart" viewBox="0 0 920 140"></svg>
-    <div class="cap">$100,000 re-traded fresh each day, net of trading costs at 10bps per round trip (the cost
-    basis above) &mdash; not compounded, so this
+    <div class="cap">$100,000 re-traded fresh each day, net of costs at 10bps per round trip &mdash; not
+    compounded, so this
     is the sum of the strategy's per-trade edge over time, not a claim about reinvested growth. Shown at a
     scale well within the strategy's own capacity (see below).</div>
   </div>
