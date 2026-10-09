@@ -180,6 +180,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
+
 /* live-status-css:start */
 /* Sits inside the text column and right-aligns to it, so the strip's right edge lines up with
    the cards below rather than overhanging them. Seven chips fit the column at these widths, so
@@ -347,7 +348,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-10-08";      /* last session the ledger has priced */
-  var BUILT   = "2026-10-09T15:34:23+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-10-09T15:44:03+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -483,6 +484,18 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   <h1>Live paper-trading book</h1>
 </section>
 
+<!-- paper-cost:start -->
+<div class="notice">
+  <p><b>Shown at market-maker transaction costs.</b> Every figure on this page prices each round
+  trip at a flat 10bps (both legs, entry and exit, about 2.5bps per order), a cost
+  level a market-making desk could plausibly reach and well below what a retail account pays.
+  At the broker's published retail schedule, about 62bps a round trip, the same
+  book over the same window is at +1.3% rather than the +10.3% shown here. The
+  signals and the holding rule are the same; the entry rule scales with cost, so at this level
+  the book also takes more trades.</p>
+</div>
+<!-- paper-cost:end -->
+
 <div class="notice">
   <p><b>This is original research, not a published strategy.</b> This page shows performance only. The instrument universe, signal thresholds, cost model, and detailed trade logs are my own and aren't
   disclosed here. Developed and tested independently. Get in touch if you'd like to discuss the methodology: <a href="mailto:timliang228@gmail.com">timliang228@gmail.com</a>.</p>
@@ -507,20 +520,24 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
   <div class="card" style="margin-top:16px">
     <h3>Trading fees</h3>
-    <p class="cap" style="margin-top:0">Every position in this ledger is charged at Interactive
-    Brokers' published Tiered rates, per
+    <p class="cap" style="margin-top:0">The figures on this page are shown at market-maker
+    transaction costs: a flat charge per round trip covering fees, taxes, spreads and slippage
+    together (see the note at the top). The retail comparison quoted there is charged at
+    Interactive Brokers' published Tiered rates, per
     <a href="https://www.interactivebrokers.com.au/en/pricing/commissions-stocks.php" target="_blank"
     rel="noopener">IBKR's fee schedule</a>, including exchange, clearing, regulatory and government
     charges, at the rates in force on the day of each trade. Borrow and financing, which the broker
     prices per security rather than publishing, are charged at an assumed flat rate on whatever is
-    held overnight.</p>
+    held overnight, in both.</p>
   </div>
   <div class="card" style="margin-top:16px">
     <h3>Slippage on entry and exit</h3>
-    <p class="cap" style="margin-top:0">Every entry and every exit is charged a measured slippage
-    allowance on top of fees, set at the pessimistic end of the achievable fill range rather than
-    the best case. Size is not modelled, so a position large enough to move its own fill would
-    cost more.</p>
+    <p class="cap" style="margin-top:0">The market-maker cost the figures are shown at is all-in:
+    it already covers slippage along with fees, taxes and spreads. The retail comparison in the
+    note at the top charges a measured slippage allowance on every entry and every exit on top
+    of fees instead, set at the pessimistic end of the achievable fill range rather than the
+    best case. Size is not modelled, so a position large enough to move its own fill would cost
+    more.</p>
   </div>
 </section>
 
@@ -546,7 +563,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 </div>
 
-<script type="application/json" id="ledger-data">{"start_date":"2026-08-12","end_target":"2027-05-09","capital":101341.43348200816,"last_date":"2026-10-07","days":[{"date":"2026-08-12","n_names":6,"net_bps":51.76,"capital":100517.61},{"date":"2026-08-13","n_names":6,"net_bps":-42.9,"capital":100086.41},{"date":"2026-08-14","n_names":4,"net_bps":63.64,"capital":100723.4},{"date":"2026-08-17","n_names":4,"net_bps":65.3,"capital":101381.1},{"date":"2026-08-18","n_names":7,"net_bps":8.26,"capital":101464.84},{"date":"2026-08-19","n_names":9,"net_bps":-58.61,"capital":100870.21},{"date":"2026-08-20","n_names":6,"net_bps":44.94,"capital":101323.49},{"date":"2026-08-21","n_names":8,"net_bps":26.3,"capital":101589.94},{"date":"2026-08-24","n_names":7,"net_bps":24.86,"capital":101842.46},{"date":"2026-08-25","n_names":7,"net_bps":34.87,"capital":102197.56},{"date":"2026-08-26","n_names":7,"net_bps":63.7,"capital":102848.54},{"date":"2026-08-27","n_names":7,"net_bps":39.64,"capital":103256.21},{"date":"2026-08-28","n_names":2,"net_bps":-14.71,"capital":103104.37},{"date":"2026-08-31","n_names":5,"net_bps":-2.52,"capital":103078.43},{"date":"2026-09-01","n_names":7,"net_bps":129.55,"capital":104413.77},{"date":"2026-09-02","n_names":6,"net_bps":54.23,"capital":104979.97},{"date":"2026-09-03","n_names":5,"net_bps":-79.48,"capital":104145.57},{"date":"2026-09-04","n_names":5,"net_bps":-76.57,"capital":103348.13},{"date":"2026-09-08","n_names":5,"net_bps":15.28,"capital":103506.03},{"date":"2026-09-09","n_names":6,"net_bps":-18.62,"capital":103313.31},{"date":"2026-09-10","n_names":5,"net_bps":-31.95,"capital":102983.18},{"date":"2026-09-11","n_names":2,"net_bps":-29.51,"capital":102679.32},{"date":"2026-09-14","n_names":4,"net_bps":21.89,"capital":102904.12},{"date":"2026-09-15","n_names":4,"net_bps":31.68,"capital":103230.13},{"date":"2026-09-16","n_names":2,"net_bps":-10.01,"capital":103126.83},{"date":"2026-09-17","n_names":2,"net_bps":-2.77,"capital":103098.27},{"date":"2026-09-18","n_names":3,"net_bps":41.87,"capital":103529.95},{"date":"2026-09-21","n_names":9,"net_bps":-62.26,"capital":102885.36},{"date":"2026-09-22","n_names":9,"net_bps":20.07,"capital":103091.89},{"date":"2026-09-23","n_names":7,"net_bps":44.99,"capital":103555.73},{"date":"2026-09-24","n_names":5,"net_bps":-81.15,"capital":102715.38},{"date":"2026-09-25","n_names":6,"net_bps":32.56,"capital":103049.82},{"date":"2026-09-28","n_names":9,"net_bps":-66.51,"capital":102364.42},{"date":"2026-09-29","n_names":10,"net_bps":22.22,"capital":102591.87},{"date":"2026-09-30","n_names":9,"net_bps":-81.35,"capital":101757.28},{"date":"2026-10-02","n_names":5,"net_bps":24.23,"capital":102003.84},{"date":"2026-10-05","n_names":5,"net_bps":-100.86,"capital":100974.98},{"date":"2026-10-06","n_names":4,"net_bps":-6.04,"capital":100914.02},{"date":"2026-10-07","n_names":4,"net_bps":42.35,"capital":101341.43}]}</script>
+<script type="application/json" id="ledger-data">{"start_date":"2026-08-12","end_target":"2027-05-09","capital":110259.74061192406,"last_date":"2026-10-07","days":[{"date":"2026-08-12","n_names":11,"net_bps":62.97,"capital":100629.75},{"date":"2026-08-13","n_names":13,"net_bps":-22.32,"capital":100405.1},{"date":"2026-08-14","n_names":11,"net_bps":75.65,"capital":101164.68},{"date":"2026-08-17","n_names":11,"net_bps":-7.13,"capital":101092.53},{"date":"2026-08-18","n_names":8,"net_bps":59.12,"capital":101690.14},{"date":"2026-08-19","n_names":15,"net_bps":4.69,"capital":101737.86},{"date":"2026-08-20","n_names":13,"net_bps":30.44,"capital":102047.53},{"date":"2026-08-21","n_names":13,"net_bps":64.91,"capital":102709.93},{"date":"2026-08-24","n_names":16,"net_bps":24.93,"capital":102965.99},{"date":"2026-08-25","n_names":14,"net_bps":64.24,"capital":103627.49},{"date":"2026-08-26","n_names":15,"net_bps":70.95,"capital":104362.71},{"date":"2026-08-27","n_names":13,"net_bps":34.5,"capital":104722.75},{"date":"2026-08-28","n_names":13,"net_bps":31.28,"capital":105050.28},{"date":"2026-08-31","n_names":12,"net_bps":-12.04,"capital":104923.84},{"date":"2026-09-01","n_names":13,"net_bps":88.92,"capital":105856.79},{"date":"2026-09-02","n_names":11,"net_bps":69.67,"capital":106594.29},{"date":"2026-09-03","n_names":11,"net_bps":-25.37,"capital":106323.88},{"date":"2026-09-04","n_names":12,"net_bps":-31.27,"capital":105991.39},{"date":"2026-09-08","n_names":10,"net_bps":24.62,"capital":106252.3},{"date":"2026-09-09","n_names":16,"net_bps":27.45,"capital":106543.94},{"date":"2026-09-10","n_names":13,"net_bps":7.88,"capital":106627.88},{"date":"2026-09-11","n_names":12,"net_bps":-31.68,"capital":106290.05},{"date":"2026-09-14","n_names":14,"net_bps":30.24,"capital":106611.44},{"date":"2026-09-15","n_names":16,"net_bps":72.7,"capital":107386.46},{"date":"2026-09-16","n_names":14,"net_bps":16.98,"capital":107568.84},{"date":"2026-09-17","n_names":14,"net_bps":32.36,"capital":107916.94},{"date":"2026-09-18","n_names":10,"net_bps":28.9,"capital":108228.8},{"date":"2026-09-21","n_names":15,"net_bps":24.91,"capital":108498.37},{"date":"2026-09-22","n_names":11,"net_bps":69.61,"capital":109253.67},{"date":"2026-09-23","n_names":13,"net_bps":8.32,"capital":109344.55},{"date":"2026-09-24","n_names":11,"net_bps":-51.97,"capital":108776.3},{"date":"2026-09-25","n_names":10,"net_bps":56.57,"capital":109391.68},{"date":"2026-09-28","n_names":12,"net_bps":-4.65,"capital":109340.83},{"date":"2026-09-29","n_names":15,"net_bps":18.65,"capital":109544.78},{"date":"2026-09-30","n_names":14,"net_bps":-54.22,"capital":108950.8},{"date":"2026-10-02","n_names":12,"net_bps":100.38,"capital":110044.43},{"date":"2026-10-05","n_names":14,"net_bps":-56.48,"capital":109422.85},{"date":"2026-10-06","n_names":12,"net_bps":48.08,"capital":109948.93},{"date":"2026-10-07","n_names":8,"net_bps":28.27,"capital":110259.74}]}</script>
 
 <script>
 (function(){
