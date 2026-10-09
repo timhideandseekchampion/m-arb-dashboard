@@ -87,18 +87,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* live-status-css:start */
 /* Sits inside the text column and right-aligns to it, so the strip's right edge lines up with
    the cards below rather than overhanging them. Seven chips fit the column at these widths, so
@@ -151,20 +139,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- live-status:start -->
 <div class="livebar">
   <div class="lz" id="lz0"><div class="n"><i></i>UTC</div><div class="v">--:--:--</div></div>
@@ -185,7 +159,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-10-08";      /* last session the ledger has priced */
-  var BUILT   = "2026-10-09T15:52:54+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-10-09T15:59:52+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -323,8 +297,9 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 <!-- paper-cost:start -->
 <div class="notice">
-  <p><b>10bps each way assumed</b> (market-maker costs): +8.5%. At retail costs,
-  about 31bps each way, the same book is +1.3%.</p>
+  <p><b>10bps each way assumed</b> (market-maker costs, slippage included): +8.5%.
+  At retail costs, about 31bps each way including slippage of
+  6.3bps in and 1.1bps out, the same book is +1.3%.</p>
 </div>
 <!-- paper-cost:end -->
 
@@ -351,24 +326,15 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
   <div class="card" style="margin-top:16px">
     <h3>Trading fees</h3>
-    <p class="cap" style="margin-top:0">The figures on this page are shown at market-maker
-    transaction costs: a flat charge per round trip covering fees, taxes, spreads and slippage
-    together (see the note at the top). The retail comparison quoted there is charged at
-    Interactive Brokers' published Tiered rates, per
+    <p class="cap" style="margin-top:0">10bps each way assumed, all-in. The retail
+    comparison uses
     <a href="https://www.interactivebrokers.com.au/en/pricing/commissions-stocks.php" target="_blank"
-    rel="noopener">IBKR's fee schedule</a>, including exchange, clearing, regulatory and government
-    charges, at the rates in force on the day of each trade. Borrow and financing, which the broker
-    prices per security rather than publishing, are charged at an assumed flat rate on whatever is
-    held overnight, in both.</p>
+    rel="noopener">Interactive Brokers' published rates</a>, with taxes, exchange fees and borrow.</p>
   </div>
   <div class="card" style="margin-top:16px">
-    <h3>Slippage on entry and exit</h3>
-    <p class="cap" style="margin-top:0">The market-maker cost the figures are shown at is all-in:
-    it already covers slippage along with fees, taxes and spreads. The retail comparison in the
-    note at the top charges a measured slippage allowance on every entry and every exit on top
-    of fees instead, set at the pessimistic end of the achievable fill range rather than the
-    best case. Size is not modelled, so a position large enough to move its own fill would cost
-    more.</p>
+    <h3>Slippage</h3>
+    <p class="cap" style="margin-top:0">Included in the 10bps each way. The retail
+    comparison charges 6.3bps on entry and 1.1bps on exit.</p>
   </div>
 </section>
 
