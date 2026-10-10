@@ -74,11 +74,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
-
-
-
-
-
 /* live-status-css:start */
 /* Sits inside the text column and right-aligns to it, so the strip's right edge lines up with
    the cards below rather than overhanging them. Seven chips fit the column at these widths, so
@@ -120,11 +115,6 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 
 
-
-
-
-
-
 <!-- live-status:start -->
 <div class="livebar">
   <div class="lz" id="lz0"><div class="n"><i></i>UTC</div><div class="v">--:--:--</div></div>
@@ -145,7 +135,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-10-08";      /* last session the ledger has priced */
-  var BUILT   = "2026-10-09T23:58:09+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-10-10T03:26:30+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -283,9 +273,9 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 <!-- paper-cost:start -->
 <div class="notice">
-  <p><b>10bps each way assumed</b> (market-maker costs, slippage included): +8.6%.
+  <p><b>10bps each way assumed</b> (market-maker costs, slippage included): +7.6%.
   At retail costs, about 31bps each way including slippage of
-  6.3bps in and 1.1bps out, the same book is +1.3%.</p>
+  6.3bps in and 1.1bps out, the same book is -0.1%.</p>
 </div>
 <!-- paper-cost:end -->
 
@@ -346,7 +336,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 </div>
 
-<script type="application/json" id="ledger-data">{"start_date":"2026-08-12","end_target":"2027-05-09","capital":108565.51739250933,"last_date":"2026-10-07","days":[{"date":"2026-08-12","n_names":11,"net_bps":62.34,"capital":100623.36},{"date":"2026-08-13","n_names":13,"net_bps":-28.44,"capital":100337.2},{"date":"2026-08-14","n_names":11,"net_bps":73.75,"capital":101077.16},{"date":"2026-08-17","n_names":11,"net_bps":-10.81,"capital":100967.85},{"date":"2026-08-18","n_names":8,"net_bps":55.12,"capital":101524.36},{"date":"2026-08-19","n_names":15,"net_bps":-3.03,"capital":101493.62},{"date":"2026-08-20","n_names":13,"net_bps":26.12,"capital":101758.68},{"date":"2026-08-21","n_names":13,"net_bps":60.22,"capital":102371.43},{"date":"2026-08-24","n_names":16,"net_bps":19.82,"capital":102574.3},{"date":"2026-08-25","n_names":14,"net_bps":61.21,"capital":103202.15},{"date":"2026-08-26","n_names":15,"net_bps":66.97,"capital":103893.25},{"date":"2026-08-27","n_names":13,"net_bps":31.52,"capital":104220.75},{"date":"2026-08-28","n_names":13,"net_bps":26.78,"capital":104499.81},{"date":"2026-08-31","n_names":12,"net_bps":-15.81,"capital":104334.6},{"date":"2026-09-01","n_names":13,"net_bps":84.94,"capital":105220.78},{"date":"2026-09-02","n_names":11,"net_bps":65.33,"capital":105908.23},{"date":"2026-09-03","n_names":11,"net_bps":-29.54,"capital":105595.34},{"date":"2026-09-04","n_names":12,"net_bps":-36.74,"capital":105207.41},{"date":"2026-09-08","n_names":10,"net_bps":21.8,"capital":105436.72},{"date":"2026-09-09","n_names":16,"net_bps":21.32,"capital":105661.49},{"date":"2026-09-10","n_names":13,"net_bps":4.38,"capital":105707.79},{"date":"2026-09-11","n_names":12,"net_bps":-34.98,"capital":105338.07},{"date":"2026-09-14","n_names":14,"net_bps":27.51,"capital":105627.81},{"date":"2026-09-15","n_names":16,"net_bps":68.06,"capital":106346.67},{"date":"2026-09-16","n_names":14,"net_bps":14.03,"capital":106495.9},{"date":"2026-09-17","n_names":14,"net_bps":26.62,"capital":106779.42},{"date":"2026-09-18","n_names":10,"net_bps":24.73,"capital":107043.47},{"date":"2026-09-21","n_names":15,"net_bps":18.46,"capital":107241.03},{"date":"2026-09-22","n_names":11,"net_bps":68.18,"capital":107972.15},{"date":"2026-09-23","n_names":13,"net_bps":3.89,"capital":108014.18},{"date":"2026-09-24","n_names":11,"net_bps":-54.12,"capital":107429.64},{"date":"2026-09-25","n_names":10,"net_bps":54.88,"capital":108019.19},{"date":"2026-09-28","n_names":12,"net_bps":-7.74,"capital":107935.64},{"date":"2026-09-29","n_names":15,"net_bps":15.75,"capital":108105.62},{"date":"2026-09-30","n_names":14,"net_bps":-59.71,"capital":107460.09},{"date":"2026-10-02","n_names":12,"net_bps":94.34,"capital":108473.9},{"date":"2026-10-05","n_names":14,"net_bps":-59.91,"capital":107824.06},{"date":"2026-10-06","n_names":12,"net_bps":44.44,"capital":108303.24},{"date":"2026-10-07","n_names":8,"net_bps":24.22,"capital":108565.52}]}</script>
+<script type="application/json" id="ledger-data">{"start_date":"2026-08-12","end_target":"2027-05-09","capital":107577.02253999919,"last_date":"2026-10-07","days":[{"date":"2026-08-12","n_names":11,"net_bps":58.83,"capital":100588.32},{"date":"2026-08-13","n_names":13,"net_bps":-26.57,"capital":100321.07},{"date":"2026-08-14","n_names":11,"net_bps":71.92,"capital":101042.6},{"date":"2026-08-17","n_names":11,"net_bps":-10.81,"capital":100933.33},{"date":"2026-08-18","n_names":8,"net_bps":49.27,"capital":101430.66},{"date":"2026-08-19","n_names":15,"net_bps":-1.41,"capital":101416.4},{"date":"2026-08-20","n_names":13,"net_bps":37.47,"capital":101796.39},{"date":"2026-08-21","n_names":13,"net_bps":59.64,"capital":102403.52},{"date":"2026-08-24","n_names":16,"net_bps":19.53,"capital":102603.49},{"date":"2026-08-25","n_names":14,"net_bps":61.21,"capital":103231.51},{"date":"2026-08-26","n_names":15,"net_bps":37.19,"capital":103615.46},{"date":"2026-08-27","n_names":13,"net_bps":32.22,"capital":103949.34},{"date":"2026-08-28","n_names":13,"net_bps":17.93,"capital":104135.75},{"date":"2026-08-31","n_names":12,"net_bps":-17.76,"capital":103950.82},{"date":"2026-09-01","n_names":13,"net_bps":86.6,"capital":104851.07},{"date":"2026-09-02","n_names":11,"net_bps":66.37,"capital":105546.92},{"date":"2026-09-03","n_names":11,"net_bps":-31.49,"capital":105214.57},{"date":"2026-09-04","n_names":12,"net_bps":-40.48,"capital":104788.68},{"date":"2026-09-08","n_names":10,"net_bps":30.94,"capital":105112.87},{"date":"2026-09-09","n_names":16,"net_bps":24.9,"capital":105374.58},{"date":"2026-09-10","n_names":13,"net_bps":-5.24,"capital":105319.32},{"date":"2026-09-11","n_names":12,"net_bps":-31.3,"capital":104989.66},{"date":"2026-09-14","n_names":14,"net_bps":28.42,"capital":105288.07},{"date":"2026-09-15","n_names":16,"net_bps":65.74,"capital":105980.27},{"date":"2026-09-16","n_names":14,"net_bps":11.58,"capital":106103.03},{"date":"2026-09-17","n_names":14,"net_bps":23.95,"capital":106357.11},{"date":"2026-09-18","n_names":10,"net_bps":17.8,"capital":106546.43},{"date":"2026-09-21","n_names":15,"net_bps":10.28,"capital":106655.94},{"date":"2026-09-22","n_names":11,"net_bps":69.98,"capital":107402.27},{"date":"2026-09-23","n_names":13,"net_bps":1.43,"capital":107417.6},{"date":"2026-09-24","n_names":11,"net_bps":-46.35,"capital":106919.77},{"date":"2026-09-25","n_names":10,"net_bps":50.58,"capital":107460.57},{"date":"2026-09-28","n_names":12,"net_bps":-9.69,"capital":107356.43},{"date":"2026-09-29","n_names":15,"net_bps":13.35,"capital":107499.8},{"date":"2026-09-30","n_names":14,"net_bps":-60.36,"capital":106850.9},{"date":"2026-10-02","n_names":12,"net_bps":91.8,"capital":107831.83},{"date":"2026-10-05","n_names":14,"net_bps":-61.46,"capital":107169.06},{"date":"2026-10-06","n_names":12,"net_bps":29.14,"capital":107481.33},{"date":"2026-10-07","n_names":8,"net_bps":8.9,"capital":107577.02}]}</script>
 
 <script>
 (function(){
