@@ -132,7 +132,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-10-12";      /* last session the ledger has priced */
-  var BUILT   = "2026-10-14T04:43:50+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-10-14T07:05:12+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -270,10 +270,8 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 <!-- paper-cost:start -->
 <div class="notice">
-  <p><b>Realistic fills, 26bps per round trip</b> (market-maker costs; Hong Kong leg filled in
-  the first 30 seconds, not at the opening print): +0.2%.
-  At the opening print and 10bps each way: +7.5%. The ledger itself
-  (retail costs, opening print): -0.9%.</p>
+  <p><b>Market-maker costs, 26bps per round trip</b>: +0.2%. The ledger
+  itself, at retail costs: -0.9%.</p>
 </div>
 <!-- paper-cost:end -->
 
@@ -301,15 +299,15 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   <div class="card" style="margin-top:16px">
     <h3>Trading fees</h3>
     <p class="cap" style="margin-top:0">26bps per round trip assumed at market-maker rates,
-    stamp duty included. The retail comparison uses
+    all-in. The retail comparison uses
     <a href="https://www.interactivebrokers.com.au/en/pricing/commissions-stocks.php" target="_blank"
     rel="noopener">Interactive Brokers' published rates</a>, with taxes, exchange fees and borrow.</p>
   </div>
   <div class="card" style="margin-top:16px">
     <h3>Slippage</h3>
-    <p class="cap" style="margin-top:0">Entries filled over the first 30 seconds of trading at the
-    measured price, not the opening print; exit slippage is in the 26bps. The retail ledger charges
-    6.3bps on entry and 1.1bps on exit.</p>
+    <p class="cap" style="margin-top:0">Entries are priced at measured fills, not an idealised price; exit
+    slippage is in the 26bps. The retail ledger charges 6.3bps on entry and
+    1.1bps on exit.</p>
   </div>
 </section>
 
