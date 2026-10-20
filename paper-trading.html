@@ -1,61 +1,64 @@
 <title>Live Paper Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   color-scheme:light;
-  --plane:#ffffff; --surface:#ffffff; --surface-2:#f4f4f4;
-  --ink:#0a0a0a; --ink-2:#52544f; --muted:#8a8c86;
-  --hair:rgba(0,0,0,0.11); --hair-strong:rgba(0,0,0,0.24);
-  --accent:#9c5a12; --accent-ink:#7a4409;
-  --good:#0c8f0c; --crit:#d03b3b;
-  --good-ink:#0a6e0a; --crit-ink:#a72e2e;
-  --serif: "Newsreader", ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+  --plane:#ffffff; --surface:#ffffff; --surface-2:#f1f3f5;
+  --ink:#0e1116; --ink-2:#4a5260; --muted:#5b6472;
+  --hair:#e3e6ea; --hair-strong:#c9ced6; --grid:#eef0f2;
+  --accent:#1d4ed8; --accent-ink:#1e40af;
+  --good:#0c8f0c; --crit:#c2410c;
+  --good-ink:#0a6e0a; --crit-ink:#b33a0b;
+  --sans:"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif:var(--sans);
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark){
   :root{
     color-scheme:dark;
-    --plane:#000000; --surface:#000000; --surface-2:#111111;
-    --ink:#f2f2f0; --ink-2:#aaada5; --muted:#6e716b;
-    --hair:rgba(255,255,255,0.13); --hair-strong:rgba(255,255,255,0.25);
-    --accent:#d99a4e; --accent-ink:#e8b06e;
-    --good:#0ca30c; --crit:#e2635a;
-    --good-ink:#3fd23f; --crit-ink:#ff9d94;
+    --plane:#0b0d10; --surface:#0b0d10; --surface-2:#161b21;
+    --ink:#e8ebef; --ink-2:#b4bbc5; --muted:#8f98a5;
+    --hair:#232a33; --hair-strong:#38414d; --grid:#1a2028;
+    --accent:#6b9cf5; --accent-ink:#9dbcf8;
+    --good:#0ca30c; --crit:#f08a5d;
+    --good-ink:#3fd23f; --crit-ink:#f4a27e;
   }
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--plane);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;}
-.wrap{max-width:920px;margin:0 auto;padding:56px 24px 100px}
-h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;text-wrap:balance;color:var(--ink)}
-h1{font-size:40px;line-height:1.2;margin:0 0 16px;font-weight:500}
-h2{font-size:19px;margin:0 0 6px}
-h3{font-size:15px;margin:0 0 4px;font-weight:650}
-p{margin:0 0 13px;color:var(--ink-2);max-width:70ch}
-.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
-.dek{font-size:16.5px;color:var(--ink-2);max-width:66ch;margin-bottom:6px}
-section{margin-top:44px}
-section.lede{margin-top:0}
-.card{background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:22px 24px}
-.cap{font-size:13px;color:var(--muted);margin-top:10px;max-width:none}
-.notice{background:none;border:none;border-left:2px solid var(--hair-strong);border-radius:0;padding:2px 0 2px 18px;margin:22px 0 8px}
-.notice p{margin:0;font-size:14px}
+body{margin:0;background:var(--plane);color:var(--ink);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--accent-ink)}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.notice{border-left:2px solid var(--hair-strong);padding:2px 0 2px 18px}
+.notice p{margin:0;font-size:14px;color:var(--ink-2)}
 .notice a{color:var(--accent-ink)}
+.wrap{max-width:1100px;margin:0 auto;padding:48px 24px 88px}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;color:var(--ink)}
+h1{font-size:40px;line-height:1.15;margin:0 0 12px;font-weight:600;letter-spacing:-.02em}
+h2{font-size:18px;font-weight:600;margin:0 0 10px}
+h3{font-size:14px;font-weight:600;margin:0 0 8px}
+p{margin:0 0 13px;color:var(--ink-2);max-width:72ch}
+.dek{font-size:16px;color:var(--ink-2);max-width:66ch;margin-bottom:6px}
+section{margin-top:28px}
+section.lede{margin-top:0;padding-bottom:24px;border-bottom:1px solid var(--hair);margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:24px}
+.cap{font-size:13px;color:var(--muted);margin-top:10px;max-width:none}
+.notice{margin:0 0 16px}
 .notice.update{display:flex;gap:10px;align-items:flex-start}
 .notice.update .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;
   color:var(--accent-ink);border:1px solid var(--hair-strong);border-radius:99px;padding:2px 9px;flex:none;margin-top:1px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 24px;margin:0 0 28px}
-.stat.dim .v{color:var(--muted);font-size:18px}
-.stat{background:none;border:none;border-radius:0;border-top:1px solid var(--hair);padding:14px 0 0}
-.stat .v{font-size:24px;font-weight:500;letter-spacing:-.01em;line-height:1.15;font-family:var(--serif)}
-.stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:8px}
-.stat.pos .v{color:var(--good-ink)} .stat.neg .v{color:var(--crit-ink)}
-@media (max-width:980px){.stats{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
-.progress-row{display:flex;align-items:center;gap:14px;margin:6px 0 22px}
-.progress-track{flex:1;height:6px;border-radius:6px;background:var(--surface-2);border:none;overflow:hidden}
+/* KPI grid, as on the backtest page: tiles separated by hairlines, label above the figure. */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair);
+  border-radius:12px;overflow:hidden;margin:0 0 24px}
+.stat{background:var(--plane);padding:18px 20px;display:flex;flex-direction:column-reverse;justify-content:flex-end;gap:6px}
+.stat .v{font-family:var(--mono);font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.2}
+.stat .l{font-size:12px;font-weight:500;color:var(--muted)}
+.stat.dim .v{color:var(--muted);font-size:16px}
+.stat.neg .v{color:var(--crit-ink)}
+@media (max-width:720px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat .v{font-size:20px}}
+.progress-row{display:flex;align-items:center;gap:14px;margin:4px 0 20px}
+.progress-track{flex:1;height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden}
 .progress-fill{height:100%;background:var(--accent);border-radius:6px 0 0 6px}
 .progress-label{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
 .empty{padding:32px 0;text-align:center;color:var(--muted);font-size:14px}
@@ -64,13 +67,13 @@ section.lede{margin-top:0}
 table{border-collapse:collapse;width:100%;font-size:13px}
 table.data th, table.data td{padding:9px 12px 9px 0;text-align:right;white-space:nowrap}
 table.data th:first-child, table.data td:first-child{text-align:left}
-table.data th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--hair)}
+table.data th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--hair-strong)}
 table.data td{border-bottom:1px solid var(--hair);font-family:var(--mono);font-variant-numeric:tabular-nums}
 table.data td:first-child{font-family:var(--sans)}
 table.data tr:last-child td{border-bottom:none}
 td.neg{color:var(--crit-ink)} td.pos{color:var(--good-ink)}
 .scroll{max-height:320px;overflow-y:auto}
-footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
 
 
 /* live-status-css:start */
@@ -132,7 +135,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-10-15";      /* last session the ledger has priced */
-  var BUILT   = "2026-10-20T02:33:53+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-10-20T02:38:27+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -402,7 +405,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);font-si
   tiles.push({l:"Sharpe so far", v: sharpeTxt, cls: sharpeCls});
   tiles.push({l:"Sortino so far", v: sortinoTxt, cls: sortinoCls});
   tiles.push({l:"Max drawdown", v: ddTxt, cls: ready ? "neg" : "dim"});
-  tiles.push({l:"Realized days", v: days.length + ' of ' + MIN_DAYS + ' needed', cls:"dim"});
+  tiles.push({l:"Realized days", v: ready ? String(days.length) : days.length + ' of ' + MIN_DAYS + ' needed', cls: ready ? "" : "dim"});
 
   document.getElementById('statTiles').innerHTML = tiles.map(function(t){
     return '<div class="stat '+t.cls+'"><div class="v">'+t.v+'</div><div class="l">'+t.l+'</div></div>';
