@@ -135,7 +135,7 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--hair);font-si
    ledger settles a session, and the page says so instead of animating a number it cannot know. */
 (function(){
   var SETTLED = "2026-11-13";      /* last session the ledger has priced */
-  var BUILT   = "2026-11-17T02:19:04+00:00";        /* when these figures were generated, UTC */
+  var BUILT   = "2026-11-17T10:39:10+00:00";        /* when these figures were generated, UTC */
   var ZONES = [["UTC", "UTC", null], ["Tokyo", "Asia/Tokyo", "TYO"], ["Shanghai", "Asia/Shanghai", "SHA"], ["Hong Kong", "Asia/Hong_Kong", "HKG"], ["Seoul", "Asia/Seoul", "SEL"], ["Taipei", "Asia/Taipei", "TPE"], ["New York", "America/New_York", "NYC"]];          /* [label, tz, sessionKey] */
   var MODE  = "public";         /* private: name the cycle; public: count only */
   /* Continuous-trading windows in local minutes-from-midnight, weekdays only. */
@@ -273,8 +273,9 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--hair);font-si
 
 <!-- paper-cost:start -->
 <div class="notice">
-  <p><b>Assumed costs, about 30bps per round trip on average</b>: +5.6%. The ledger
-  itself, at retail costs (60bps per round trip): +3.3%.</p>
+  <p><b>Current rules over this window, about 30bps per round trip on average</b>: +5.6%.
+  The rules were revised during the window, so this is not a forward record. The forward ledger, Hong Kong only at retail
+  costs (60bps per round trip): +3.3%.</p>
 </div>
 <!-- paper-cost:end -->
 
@@ -355,7 +356,7 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--hair);font-si
   var totalDays = Math.round((endTarget - start) / 86400000);
   var pct = Math.min(100, Math.max(0, elapsedDays/totalDays*100));
   document.getElementById('progressFill').style.width = pct.toFixed(0)+'%';
-  document.getElementById('progressLabel').textContent = 'Day ' + elapsedDays + ' of ' + totalDays;
+  document.getElementById('progressLabel').textContent = 'Calendar day ' + elapsedDays + ' of ' + totalDays;
   document.getElementById('progressPct').textContent = pct.toFixed(0)+'%';
 
   var days = L.days || [];
